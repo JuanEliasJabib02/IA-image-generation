@@ -15,13 +15,36 @@ const CreatePost = () => {
     
   })
 
-  const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value})
 
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:4000/api/v1/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(form)
+        })
+
+        await response.json()
+
+        navigate("/");
+  
+      } catch (error) {
+        alert(error)
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      alert("please enter a prompt and generate a image")
+    }
     
   }
 
@@ -31,8 +54,31 @@ const CreatePost = () => {
     setForm({...form, prompt: randomPrompt})
   }
 
-  const generateImg = () => {
-    
+  const generateImg = async  () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true);
+        const response = await fetch("http://localhost:4000/api/v1/dalle",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+
+            },
+            body: JSON.stringify({prompt: form.prompt})
+          }
+        )
+
+        const data = await response.json()
+        setForm({...form, photo: `data:image/jpeg;base64,${data.photo}`})
+      } catch (error) {
+        alert(error)
+      } finally {
+        setGeneratingImg(false)
+      }
+    } else {
+      alert("please enter a prompt")
+    }
   }
 
   const [generatingImg, setGeneratingImg] = useState(false)
@@ -52,12 +98,12 @@ const CreatePost = () => {
       <form className='mt-16 max-w-3xl' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-5'>
           <FormField
-            labelName="your name"
+            labelName="Your Name"
             type="text"
             name="name"
-            placeholder="John Doe"
+            placeholder="Ex., Juan Elias"
             value={form.name}
-            onChange={handleChange}
+            handleChange={handleChange}
           />
             <FormField
             labelName="Prompt"
@@ -68,7 +114,7 @@ const CreatePost = () => {
              another pool with translucent pastel pink water, 
              next to a big window, digital art"
             value={form.prompt}
-            onChange={handleChange}
+            handleChange={handleChange}
             isSupriseMe
             handleSuprimeMe={handleSuprimeMe}
           />
@@ -97,9 +143,8 @@ const CreatePost = () => {
 
             {
               generatingImg && (
-                <div className='absolute insert-0 z-0 flex
-                justify-center items-center bg-[rgba(0,0,0,0.5)]
-                rounded-lg'>
+                <div className="absolute inset-0 z-0 flex 
+                justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg">
                   < Loader />
                 </div>
                )
