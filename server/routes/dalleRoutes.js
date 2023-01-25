@@ -8,7 +8,7 @@ dotenv.config()
 
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.OPENAPI_APIKEY,
 })
 
 const openai = new OpenAIApi(configuration)
@@ -31,7 +31,6 @@ dalleRoutes.post("/", async (req, res) => {
       response_format: "b64_json"
     })
 
-    console.log(aiResponse)
 
     const image = aiResponse.data.data[0].b64_json;
 
