@@ -20,7 +20,7 @@ const postRoutes = express.Router()
 postRoutes.get("/", async (req, res) => {
   try {
     const posts = await Post.find({});
-    console.log("executed here")
+
 
     res.status(200).json({ status: true, data: posts })
   } catch (error) {

@@ -15,9 +15,7 @@ const openai = new OpenAIApi(configuration)
 
 const dalleRoutes = express.Router()
 
-dalleRoutes.get("/", (req, res) => {
-  res.send("hola from dalle")
-})
+
 
 dalleRoutes.post("/", async (req, res) => {
   try {
