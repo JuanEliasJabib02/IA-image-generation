@@ -3,7 +3,6 @@ import React from 'react'
 const FormField = ({ labelName, type, name, placeholder, value,
   handleChange, isSupriseMe, handleSuprimeMe }) => {
   
-  console.log(name)
   return (
     <div>
       <div className='flex items-center gap-2 mb-2'>

@@ -15,7 +15,8 @@ const CreatePost = () => {
     
   })
 
-  const handleChange = () => {
+  const handleChange = (e) => {
+    setForm({...form, [e.target.name]: e.target.value})
 
   }
 
@@ -25,14 +26,16 @@ const CreatePost = () => {
   }
 
   const handleSuprimeMe = () => {
-     
+    const randomPrompt = getRandomPrompt(form.prompt);
+    console.log(randomPrompt)
+    setForm({...form, prompt: randomPrompt})
   }
 
   const generateImg = () => {
     
   }
 
-  const [generatingImg, setGeneratingImg] = useState(true)
+  const [generatingImg, setGeneratingImg] = useState(false)
   const [loading, setLoading] = useState(false)
   return (
     <section className='max-w-7xl mx-auto'>
@@ -64,7 +67,7 @@ const CreatePost = () => {
             area with a pool with clear water and
              another pool with translucent pastel pink water, 
              next to a big window, digital art"
-            value={form.name}
+            value={form.prompt}
             onChange={handleChange}
             isSupriseMe
             handleSuprimeMe={handleSuprimeMe}
