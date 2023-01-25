@@ -2,10 +2,13 @@ import express from "express";
 import * as dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
 
+dotenv.config()
+
+
 
 
 const configuration = new Configuration({
-  apiKey: process.env.OPEN_API_KEY,
+  apiKey: "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",
 })
 
 const openai = new OpenAIApi(configuration)
@@ -20,12 +23,15 @@ dalleRoutes.post("/", async (req, res) => {
   try {
     const { prompt } = req.body;
 
+
     const aiResponse = await openai.createImage({
       prompt,
       n: 1,
       size: "1024x1024",
       response_format: "b64_json"
     })
+
+    console.log(aiResponse)
 
     const image = aiResponse.data.data[0].b64_json;
 
@@ -35,6 +41,7 @@ dalleRoutes.post("/", async (req, res) => {
 
   } catch (error) {
     console.log(error)
+    console.log("el error esta aqui")
     res.status(500)
   }
 
