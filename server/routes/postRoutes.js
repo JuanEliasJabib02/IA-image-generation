@@ -14,16 +14,13 @@ cloudinary.config({
 })
 const postRoutes = express.Router()
 
-postRoutes.get("/", (req, res) => {
-  console.log("no we are here")
-  res.send("hola from post")
-})
 
 //Get all post
 
 postRoutes.get("/", async (req, res) => {
   try {
     const posts = await Post.find({});
+    console.log("executed here")
 
     res.status(200).json({ status: true, data: posts })
   } catch (error) {
@@ -45,7 +42,7 @@ postRoutes.post("/", async (req, res) => {
       photo: photoUrl.url
     })
 
-    console.log(newPost)
+
 
     res.status(201).json({ succes: true, data: newPost })
   } catch (error) {
